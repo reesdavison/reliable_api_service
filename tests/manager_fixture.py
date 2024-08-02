@@ -1,8 +1,10 @@
 import asyncio
 from unittest.mock import AsyncMock
 
+import httpx
 import pytest
 
+from app.enums import ServiceManagerStatus
 from app.service_manager import UnreliableServiceManager
 
 
@@ -13,6 +15,7 @@ def triggered_test_manager():
 
     async def mocked_trigger(*args, **kwargs):
         await trigger_make_request.wait()
+        return ServiceManagerStatus.ACK, httpx.Response(status_code=200, content="good")
 
     manager._make_request = AsyncMock(side_effect=mocked_trigger)
     return manager, trigger_make_request

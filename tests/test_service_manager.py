@@ -2,6 +2,8 @@ import asyncio
 
 import pytest
 
+from app.enums import ServiceManagerStatus
+
 from .manager_fixture import triggered_test_manager
 
 
@@ -23,11 +25,11 @@ async def test_service_manager_bursts(triggered_test_manager):
     # first task should block on trigger_make_request.wait()
     # and be released here
     trigger_make_request.set()
-    await first_task
+    first_result = await first_task
 
-    assert test_manager._handle_result.call_count == 1
     assert test_manager._make_request.call_count == 1
-    assert test_manager._handle_unavailable.call_count == 9
+    assert first_result[0] == ServiceManagerStatus.ACK
+    assert all([res[0] == ServiceManagerStatus.BUSY for res in results])
 
     # sleep time step amount to
     await asyncio.sleep(test_manager.time_step)
@@ -36,10 +38,10 @@ async def test_service_manager_bursts(triggered_test_manager):
     first_coroutine = test_manager.call("GET", url="foo.com")
     first_task = asyncio.create_task(first_coroutine)
     coroutines = [test_manager.call("GET", url="foo.com") for i in range(999)]
-    await asyncio.gather(*coroutines)
+    results = await asyncio.gather(*coroutines)
     trigger_make_request.set()
-    await first_task
+    first_result = await first_task
 
-    assert test_manager._handle_result.call_count == 1 + 1
-    assert test_manager._make_request.call_count == 1 + 1
-    assert test_manager._handle_unavailable.call_count == 9 + 999
+    assert test_manager._make_request.call_count == 2
+    assert first_result[0] == ServiceManagerStatus.ACK
+    assert all([res[0] == ServiceManagerStatus.BUSY for res in results])
