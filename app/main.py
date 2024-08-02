@@ -79,8 +79,8 @@ async def call_webhook(task: schemas.IntSignTask):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.queue = queue.InMemoryQueue()
     app.state.cfg = get_app_config()
+    app.state.queue = queue.queue_factory(app.state.cfg)
     set_app_log_level(app.state.cfg.LOG_LEVEL)
     app.state.manager = UnreliableServiceManager(
         headers=get_unreliable_service_headers(app.state.cfg)
@@ -91,6 +91,7 @@ async def lifespan(app: FastAPI):
             queue=app.state.queue,
             manager=app.state.manager,
             on_success=call_webhook,
+            max_retries=app.state.cfg.MAX_TASK_RETRIES,
         )
     )
     yield
@@ -129,7 +130,6 @@ async def root(request: Request) -> Response:
 
 @app.post(TEST_WEBHOOK_PATH, response_model=schemas.SignTask)
 async def test_webhook(request: Request, input_data: schemas.SignTask):
-    logger.debug(f"Test webhook succeeded {input_data}")
     return input_data
 
 

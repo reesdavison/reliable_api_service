@@ -25,5 +25,11 @@ class IntSignTask(SignTask):
     def inc_retries(self):
         self.num_retries += 1
 
+    def mark_done(self):
+        self.status = SignTaskStatus.SUCCESS
+
+    def mark_failed(self):
+        self.status = SignTaskStatus.FAIL
+
     def sanitize(self) -> SignTask:
         return SignTask.model_validate(self.model_dump())

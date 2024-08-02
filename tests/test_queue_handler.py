@@ -123,7 +123,8 @@ async def test_queue_handler_busy_and_growing_queue():
 
     assert on_success.call_count == 0
     assert len(queue) == 2
-    assert queue.peak() == t1
+    with queue.get() as top:
+        assert top == t1
 
     # add another item to the queue and sleep so queue handler can resume
     queue.add(t3)
@@ -131,7 +132,8 @@ async def test_queue_handler_busy_and_growing_queue():
 
     assert on_success.call_count == 0
     assert len(queue) == 3
-    assert queue.peak() == t1
+    with queue.get() as top:
+        assert top == t1
 
     task.cancel()
 
@@ -178,7 +180,8 @@ async def test_queue_handler_ack_but_bad_status():
 
     assert on_success.call_count == 0
     assert len(queue) == 2
-    assert queue.peak() == t1
+    with queue.get() as top:
+        assert top == t1
 
     # add another item to the queue and sleep so queue handler can resume
     queue.add(t3)
@@ -186,7 +189,8 @@ async def test_queue_handler_ack_but_bad_status():
 
     assert on_success.call_count == 0
     assert len(queue) == 3
-    assert queue.peak() == t1
+    with queue.get() as top:
+        assert top == t1
 
     task.cancel()
 

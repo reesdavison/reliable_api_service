@@ -583,6 +583,20 @@ files = [
 ]
 
 [[package]]
+name = "persist-queue"
+version = "1.0.0"
+description = "A thread-safe disk based persistent queue in Python."
+optional = false
+python-versions = "*"
+files = [
+    {file = "persist-queue-1.0.0.tar.gz", hash = "sha256:3ffb746902d3023fd09eb46897609fdee6c77b1641f19e2fc8d98d744bdfc845"},
+    {file = "persist_queue-1.0.0-py3-none-any.whl", hash = "sha256:81bb20030b480fcacecc3abe6261480c818246f4d838fdf0217e36c2552a5f3a"},
+]
+
+[package.extras]
+extra = ["DBUtils (<3.0.0)", "PyMySQL", "cbor2 (>=5.2.0)", "msgpack (>=0.5.6)"]
+
+[[package]]
 name = "pluggy"
 version = "1.5.0"
 description = "plugin and hook calling mechanisms for python"
@@ -1565,4 +1579,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8983c0295872daff522cd44a32b86e2d6ba303760b6c89636fa0e9e2a54d6eae"
+content-hash = "3d2169dd9ae560acfa401f7a7cca7f8f67a632d4210f8f29298d67fb060a8af5"
