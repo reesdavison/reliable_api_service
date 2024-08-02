@@ -1,1 +1,1 @@
-from .messages import SignTask
+from .messages import IntSignTask, SignTask
