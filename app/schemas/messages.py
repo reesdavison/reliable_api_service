@@ -1,7 +1,6 @@
-from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
 from app.enums import SignTaskStatus
 
@@ -28,15 +27,3 @@ class IntSignTask(SignTask):
 
     def sanitize(self) -> SignTask:
         return SignTask.model_validate(self.model_dump())
-
-
-# class SignTask(BaseSignTask):
-
-#     @classmethod
-#     def from_task(cls, task: IntSignTask) -> "SignTask":
-#         return cls.model_validate(
-#             {
-#                 **task.model_dump(exclude=["num_retries_remaining"]),
-#                 # "status": SignTaskStatus.SUCCESS,
-#             }
-#         )

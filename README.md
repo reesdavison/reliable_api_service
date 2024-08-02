@@ -18,15 +18,15 @@ If I had gone for a none ASGI application and just a WSGI. Using a separate thre
 
 Multiple processes would likely be overkill for this. We'd have to think about sharing state between the processes given they don't share memory. The tasks are network requests ie IO bound not CPU bound so I believe this would be the wrong approach.
 
-The main negative of the event loop approach in Python is all the code has to be written async, and any missing awaits can block the event loop and block the server.
+The main negative of the event loop approach in Python is all the code has to be written async, and any missing awaits can block the event loop and block the server. Testing can be painful.
 
 
-## Future things
+## Other/future things
 
 - Authorisation of the webhook.
 - Just throwing messages away after a number of attempts - we'd want these to be saved either to a dead letter queue or permanent storage such as a database.
 - Use RabbitMQ for the persistent queue. Decided it currently wasn't worth the effort for this demonstration. It would take care of the dead letter element.
-
+- We've not really thought about security of messages held in the queue. With RSA we're only trying to ensure we can verify the messages have been authorised by some authority. The contents aren't necessarily sensitive. If the contents are sensitive RabbitMQ can be configured with TLS. We can also encrypt the data in the application layer with symmetric encryption.
 
 
 ## Local dev

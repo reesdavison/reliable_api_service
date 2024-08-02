@@ -1,5 +1,4 @@
 import os
-import sys
 from functools import lru_cache
 
 from dotenv import dotenv_values
@@ -16,10 +15,4 @@ def get_app_config() -> AppConfig:
             **os.environ,
         }
     )
-    return config
-
-
-def get_test_config() -> AppConfig:
-    # we setup the DB separately
-    config = AppConfig(DATABASE_URL="")
     return config
