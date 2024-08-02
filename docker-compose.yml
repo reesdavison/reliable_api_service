@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    command: run_app
+    environment:
+      QUEUE_TYPE: persistent
+      PERSISTENT_QUEUE_PATH: /var/lib/sqlite/data
+      LOG_LEVEL: DEBUG
+      API_KEY: ${API_KEY}
+      UNRELIABLE_SERVICE_URL: "https://hiring.api.synthesia.io"
+    volumes:
+      - ${APP_STORAGE:-./data}:/var/lib/sqlite/data

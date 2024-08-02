@@ -49,11 +49,7 @@ There's 2 ways:
 
 
 ### Running in dev mode
-After migrating your DB to the latest. Run postgres in one terminal with
-```
-docker-compose up db
-```
-In another terminal, run the dev server with
+Run the dev server with
 ```
 fastapi dev app/main.py
 ```
@@ -69,9 +65,10 @@ Once the app is running.
 ## Production
 If you just want to build the container
 ```
-docker build . --tag fastapi_crud_app-web
+docker build . --tag reliable-api-service
 ```
 If you want to build and run all the services together, we're using docker-compose to serve our app.
 ```
+export API_KEY=<ENTER>
 docker-compose up --build
 ```
