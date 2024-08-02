@@ -4,7 +4,7 @@ from collections.abc import Awaitable, Callable
 
 from app import queue, schemas
 from app.constants import DEFAULT_MAX_TASK_RETRIES
-from app.enums import ServiceManagerStatus, SignTaskStatus
+from app.enums import ServiceManagerStatus
 from app.logging import get_logger
 from app.service_manager import UnreliableServiceManager
 

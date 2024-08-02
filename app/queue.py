@@ -3,6 +3,8 @@ from collections import deque
 from collections.abc import Generator
 from contextlib import contextmanager
 
+import persistqueue
+
 from app.config import AppConfig
 from app.enums import SignTaskStatus
 from app.schemas import IntSignTask
@@ -45,9 +47,6 @@ class InMemoryQueue(AbstractQueue):
 
     def __len__(self) -> int:
         return len(self.queue)
-
-
-import persistqueue
 
 
 class PersistentQueue(AbstractQueue):

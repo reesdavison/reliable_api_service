@@ -25,7 +25,7 @@ The main negative of the event loop approach in Python is all the code has to be
 
 - Authorisation of the webhook.
 - Just throwing messages away after a number of attempts - we'd want these to be saved either to a dead letter queue or permanent storage such as a database.
-- Use RabbitMQ for the persistent queue. Decided it currently wasn't worth the effort for this demonstration. It would take care of the dead letter element.
+- Use RabbitMQ for the persistent queue. Decided it currently wasn't worth the effort for this demonstration. It would take care of the dead letter element. Quite like that persistentqueue lib using SQLite however.
 - We've not really thought about security of messages held in the queue. With RSA we're only trying to ensure we can verify the messages have been authorised by some authority. The contents aren't necessarily sensitive. If the contents are sensitive RabbitMQ can be configured with TLS. We can also encrypt the data in the application layer with symmetric encryption.
 - Fairness & prioritization of messages.
 
