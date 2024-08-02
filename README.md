@@ -23,6 +23,7 @@ The main negative of the event loop approach in Python is all the code has to be
 
 ## Other/future things
 
+- An integration test spinning up the service, and firing a thousand requests at it - maybe would use locust. test_service_manager_bursts unit test covers a lot of worry this would be fine however, as that's the component likely to be blocking. 
 - Authorisation of the webhook.
 - Just throwing messages away after a number of attempts - we'd want these to be saved either to a dead letter queue or permanent storage such as a database.
 - Use RabbitMQ for the persistent queue. Decided it currently wasn't worth the effort for this demonstration. It would take care of the dead letter element. Quite like that persistentqueue lib using SQLite however.
