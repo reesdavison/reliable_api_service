@@ -23,7 +23,9 @@ The main negative of the event loop approach in Python is all the code has to be
 
 ## Future things
 
-- Authorisation of the webhook
+- Authorisation of the webhook.
+- Just throwing messages away after a number of attempts - we'd want these to be saved either to a dead letter queue or permanent storage such as a database.
+- Use RabbitMQ for the persistent queue. Decided it currently wasn't worth the effort for this demonstration. It would take care of the dead letter element.
 
 
 
