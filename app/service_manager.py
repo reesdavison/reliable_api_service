@@ -1,8 +1,6 @@
 import asyncio
-import logging
 import time
 
-# from collections.abc import Callable, Generator
 import httpx
 
 from app.enums import ServiceManagerStatus
@@ -19,12 +17,15 @@ class UnreliableServiceManager:
         self.last_time = time.time() - (self.time_step * 1.1)
         self.lock = asyncio.Lock()
 
-    async def _make_request(self, method: str, url: str, *args, **kwargs):
+    async def _make_request(
+        self, method: str, url: str, *args, **kwargs
+    ) -> httpx.Response | None:
         logger.debug(f"Making external request to {url}")
         try:
             resp = await self.client.request(method=method, url=url, *args, **kwargs)
         except httpx.RequestError:
             logger.exception(f"Error connecting to {url}")
+            return None
 
         logger.debug(f"Response status={resp.status_code}, content={resp.content}")
         return resp
@@ -39,10 +40,10 @@ class UnreliableServiceManager:
             async with self.lock:
                 res = await self._make_request(method=method, url=url, *args, **kwargs)
                 self.last_time = time.time()
-                # self._handle_result(res)
+                if res is None:
+                    return ServiceManagerStatus.BUSY, None
                 return ServiceManagerStatus.ACK, res
 
-        # self._handle_unavailable()
         return ServiceManagerStatus.BUSY, None
 
     async def cleanup(self):

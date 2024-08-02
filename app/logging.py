@@ -4,13 +4,14 @@ from logging import getLogger
 LOG_PREFIX = "reliable_api_service"
 
 
-def get_logger(name):
+def get_logger(name: str):
     """name should come from __name__ in the file"""
     logger = getLogger(".".join([LOG_PREFIX, name]))
     return logger
 
 
-def set_app_log_level(level):
+def set_app_log_level(level: str):
+    """level should be one of DEBUG, INFO, WARNING, ERROR"""
     logger = getLogger(LOG_PREFIX)
     ch = logging.StreamHandler()
     ch.setLevel(level)

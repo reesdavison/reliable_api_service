@@ -12,7 +12,9 @@ from uuid import uuid4
 
 import fastapi
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 import app.queue as queue
 import app.schemas as schemas
@@ -67,7 +69,9 @@ async def call_webhook(task: schemas.IntSignTask):
     res = None
     try:
         async with httpx.AsyncClient(timeout=1.0) as client:
-            res = await client.post(task.webhook_url, data=task.sanitize().model_dump())
+            res = await client.post(
+                task.webhook_url, json=task.sanitize().model_dump(mode="json")
+            )
     except httpx.RequestError:
         logger.exception(f"Error connecting to url={task.webhook_url}")
 
@@ -135,6 +139,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    exc_str = f"{exc}".replace("\n", " ").replace("   ", " ")
+    logging.error(f"{request}: {exc_str}")
+    content = {"status_code": 10422, "message": exc_str, "data": None}
+    return JSONResponse(
+        content=content, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY
+    )
 
 
 @asynccontextmanager
