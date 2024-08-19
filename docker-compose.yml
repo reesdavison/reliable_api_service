@@ -9,6 +9,6 @@ services:
       PERSISTENT_QUEUE_PATH: /var/lib/sqlite/data
       LOG_LEVEL: DEBUG
       API_KEY: ${API_KEY}
-      UNRELIABLE_SERVICE_URL: "https://hiring.api.synthesia.io"
+      UNRELIABLE_SERVICE_URL: "https://xxxx.io"
     volumes:
       - ${APP_STORAGE:-./data}:/var/lib/sqlite/data
